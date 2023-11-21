@@ -1,0 +1,10 @@
+ibrary(alr4);  data("Highway")
+
+and the description of the variables may be obtained through the command help(Highway). The requisite R code for obtaining the ivif is given below.
+
+lograte = log(Highway$rate)
+
+lmrate = lm(lograte~adt+len+trks+lane+acpt+sigs+itg+slim+lwid+shld,data=Highway)
+
+library(lmreg);  ivif(lmrate)
+##The resulting IVIFs are greater than 100 for the intercept (1005.9), slim (338.1) and lwid (911.4).
