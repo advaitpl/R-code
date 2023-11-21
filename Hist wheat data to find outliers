@@ -1,0 +1,11 @@
+ibrary(HistData)
+
+data(Wheat)
+
+Yearsq = Wheat$Year^2
+
+lmwheat=lm(Wages~Year+Yearsq,data=Wheat)
+
+library(MASS)
+
+cbind(hatvalues(lmwheat),stdres(lmwheat),studres(lmwheat))
