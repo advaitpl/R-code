@@ -1,0 +1,20 @@
+
+library("lmreg")
+data(lifelength)
+lifelength
+
+?lifelength
+musician<-subset(lifelength,Category==4)
+
+musician$Category <- ifelse(musician$Category == 4, 0)
+
+musician
+mathematician<-subset(lifelength,Category==5)
+
+mathematician$Category<-ifelse(mathematician$Category == 5, 1)
+
+mathematician
+dataframe1<-data.frame(rbind(musician, mathematician))
+dataframe1
+fm<-lm(dataframe1$Lifelength~dataframe1$Category)
+summary(fm)
