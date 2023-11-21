@@ -1,0 +1,8 @@
+library(HistData);  
+data("Guerry")
+
+crime2=lm(Crime_prop~factor(Region)+Wealth,data=na.omit(Guerry))
+
+crime1=lm(Crime_prop~Wealth,data=na.omit(Guerry))
+
+hanova(crime1,crime2)
