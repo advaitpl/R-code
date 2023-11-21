@@ -1,0 +1,10 @@
+library(lmreg)
+data(LAcrime)
+
+Homrate = LAcrime$Homicide *100000 / LAcrime$Population
+
+lmYT = lm(Homrate ~ Year + TempCelsius, data = LAcrime)
+
+lmBase = lm(Homrate ~ 1)
+
+hanova(lmBase,lmYT)
