@@ -1,0 +1,16 @@
+library(alr4)
+data(wblake)
+
+result <- aggregate(Length ~ Age, data = wblake, FUN = mean)
+result$Age2<-result$Age^2
+
+result 
+
+x<-summary(lm(result$Length~result$Age))
+x
+abline(x)
+
+x2<-lm(result$Length~(result$Age+(result$Age2)),data=result)
+e<-summary(x2)
+e
+?lm
