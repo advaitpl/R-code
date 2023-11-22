@@ -1,0 +1,17 @@
+library(lmreg); data("waist")
+
+lmAT = lm(AT~Waist, data=waist)
+
+lmAT5 = lm(AT~Waist,data=waist,weights = 1/Waist^5)
+
+R1sq = cor(lmAT5$fitted.values,waist$AT)^2
+
+R2sq = 1 - sum((waist$AT - lmAT5$fitted.values)^2) / sum((waist$AT - mean(waist$AT))^2) 
+
+Rsq = summary(lmAT)$r.sq
+
+c(R1sq,R2sq,Rsq)
+
+3.
+Question 3
+Can the fitted values from a weig
