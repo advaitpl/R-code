@@ -1,0 +1,29 @@
+library(lmreg); data("imf2015")
+
+lmun = lm(UNMP~EXP+INFL+INV,data=imf2015)
+
+library(MASS)
+
+par(mfrow=c(2,2))
+
+plot(lmun$fit,stdres(lmun),xlab="Fitted values",ylab="Standardized residual")
+
+abline(h=0,lty=2); title("Response is UNMP")
+
+y1=sqrt(imf2015$UNMP); lmun1 = lm(y1~EXP+INFL+INV,data=imf2015)
+
+plot(lmun1$fit,stdres(lmun1),xlab="Fitted values",ylab="Standardized residual")
+
+abline(h=0, lty=2); title("Response is sqrt(UNMP)")
+
+y2=1/imf2015$UNMP; lmun2 = lm(y2~EXP+INFL+INV,data=imf2015)
+
+plot(lmun2$fit,stdres(lmun2),xlab="Fitted values",ylab="Standardized residual")
+
+abline(h=0, lty=2); title("Response is 1/UNMP")
+
+y3=(imf2015$UNMP)^2; lmun3 = lm(y3~EXP+INFL+INV,data=imf2015)
+
+plot(lmun3$fit,stdres(lmun3),xlab="Fitted values",ylab="Standardized residual")
+
+abline(h=0, lty=2); title("Response is UNMP^2")
