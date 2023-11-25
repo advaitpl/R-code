@@ -1,0 +1,19 @@
+library(alr4); data("MinnWater")
+
+lmuni = lm(muniUse~muniPrecip+muniPop,data=MinnWater)
+
+x = stdres(lmuni); n=length(x)
+
+par(mfrow=c(1,2))
+
+plot(x,type="b", ylab = "x")
+
+abline(h=0,lty=2)
+
+title("Index of standardized residuals")
+
+plot(x[1:(n-1)], x[2:n], xlab = "Lagged x", ylab = "x", type="l")
+
+abline(0, 1, lty = 2)
+
+title("Lag plot of standardized residuals")
