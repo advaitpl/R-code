@@ -1,0 +1,8 @@
+library(lmreg)
+data("drugprice")
+lm0<-lm(OriginatorMPR~GenericMPR,data = drugprice)
+qqnorm(stdres(lm0))
+qqline(stdres(lm0))
+shapiro.test(stdres(lm0))
+library(nortest)
+ad.test(stdres(lm0))
