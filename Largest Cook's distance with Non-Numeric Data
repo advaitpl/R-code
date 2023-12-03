@@ -1,0 +1,5 @@
+library(alr4); data(sleep1)
+
+lmsl <- lm(TS ~ GP+as.numeric(D)+as.numeric(P), data = sleep1)
+
+which(cooks.distance(lmsl) == max(cooks.distance(lmsl)))
