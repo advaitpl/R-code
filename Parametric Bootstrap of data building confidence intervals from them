@@ -1,0 +1,75 @@
+# Bootstrap in fish data - confidence intervals and testing
+library(alr4)
+data("wblake")
+head(wblake)
+Lensq <- wblake$Length^2
+lmfish <- lm(Age ~ Length + Lensq, data = wblake)
+
+# Check plots of standardized residuals
+library(MASS)
+plot(wblake$Length,stdres(lmfish))
+plot(lmfish$fitted.values,stdres(lmfish))
+
+# Check normality
+qqnorm(stdres(lmfish))
+qqline(stdres(lmfish))
+sw <- signif(shapiro.test(stdres(lmfish))$p.value,3) 
+text(-1.5,2, paste("SW p-value", sw), cex = .7)
+ad <- signif(ad.test(stdres(lmfish))$p.value,3) 
+text(-1.5,1, paste("AD p-value", ad), cex = .7)
+
+# Summary of LS estimates, confidence limits
+summary(lmfish)[[4]]
+confint(lmfish)
+
+# Nonparametric bootstrap confidence intervals
+set.seed(1234); nboot <- 1000; betanp <- NULL
+n <- length(wblake$Age)
+for (i in 1:nboot) {
+  ib <- sample((1:n), size = n, replace = T)
+  yb <- wblake$Age[ib]
+  x1b <- wblake$Length[ib]
+  x2b <- Lensq[ib]
+  mboot <- lm(yb ~ x1b + x2b)
+  betanp <- rbind(betanp, mboot$coefficients)
+}
+confnp <- quantile(betanp[,1],probs = c(0.025,0.975))
+confnp <- rbind(confnp, quantile(betanp[,2],probs = c(0.025,0.975)))
+confnp <- rbind(confnp, quantile(betanp[,3],probs = c(0.025,0.975)))
+confnp
+confint(lmfish)
+
+# Model based bootstrap confidence intervals
+respool = lmfish$residuals
+set.seed(1234); nboot <- 1000;  beta <- NULL
+for (i in 1:nboot) {
+  yb <- lmfish$fitted.values +
+    sample(respool, size = n, replace = T)
+  mboot <- lm(yb ~ Length + Lensq, data = wblake)
+  beta <- rbind(beta, mboot$coefficients)
+}
+confp <- quantile(beta[,1],probs = c(0.025,0.975))
+confp <- rbind(confp, quantile(beta[,2],probs = c(0.025,0.975)))
+confp <- rbind(confp, quantile(beta[,3],probs = c(0.025,0.975)))
+confp
+
+
+# Model based Bootstrap for Testing 
+# Null hypothesis is beta0 = -2
+# Lower sided test, alternative is beta0 < -2. 
+hist(beta[,1])
+abline(v=-2, col=2)
+length(which(beta[,1] < -2)) / length(beta[,1]) 
+# coverage prob of (-âˆž,-2]
+
+length(which(beta[,1] > -2)) / length(beta[,1]) 
+# 1 sided pvalue
+
+# two sided test
+Pestminus  <- length(which(beta[,1] > -2)) / length(beta[,1])
+Pestplus  <- 1 - Pestminus
+2*min(Pestplus, Pestminus) # 2 sided pvalue 
+# Contrast test based on normal theory
+library(lmreg); p = c(1,0,0)
+hyptest(lmfish, p, xi = -2, type = "lower")
+
