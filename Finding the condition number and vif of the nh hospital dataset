@@ -1,0 +1,17 @@
+library(GLMsData)
+
+data("nhospital")
+
+library(car)
+
+model = lm( MainHours ~., data=nhospital)
+
+summary(model)
+
+vif(model)
+
+X = model.matrix(MainHours~., data=nhospital)[,-1] # design matrix without intercept
+
+lam = eigen(t(X)%*%X)$values # eigenvalues of (X^T)*X 
+
+max(lam)/min(lam) # condition number 
