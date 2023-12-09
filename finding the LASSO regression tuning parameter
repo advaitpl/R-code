@@ -1,0 +1,14 @@
+library(GLMsData)
+
+data("nhospital")
+
+set.seed(123)
+
+lambdas = 10^seq(-3, 3, length=100)
+
+la.cv = cv.glmnet(X, y, alpha = 1, lambda = lambdas, nfolds = 3)
+
+la.cv$lambda.min
+
+##The optimum value of the penalty parameter is obtained as 93.26. It belongs to one of the given ranges.
+
