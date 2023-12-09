@@ -1,0 +1,11 @@
+library(GLMsData)
+
+data("nhospital")
+
+en_fit = glmnet(X,y, alpha = 0.5, lambda = 50)
+
+en.pred = predict(en_fit, s = 50, newx = X)
+
+mean((en.pred-y)^2)
+
+##The mean squared  error is 19625.3 
