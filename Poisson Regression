@@ -1,0 +1,30 @@
+rm(list = ls(all.names = TRUE))
+#======== Poisson regression ========
+
+#Load the Crab data
+crab = read.table("https://users.stat.ufl.edu/~aa/glm/data/Crabs.dat", 
+                  header = TRUE)
+
+# fit Poisson log-linear model and check summary
+pfit = glm(y~width+factor(color)+factor(spine), 
+           family = poisson(link="log"), crab)
+summary(pfit) # summarize fitted model 
+
+
+# predict for a new obs or for all obervations 
+predict(pfit, newdata = data.frame(width=26,color=3, spine=1), 
+        type = "response")
+(pred = predict(pfit, type = "response") ) # predict for all x values 
+
+# confidence intervals
+confint(pfit, level = 0.95)
+
+
+# comparing nested models by LR test
+#-------------------------------------
+pfit_F = glm(y~width+factor(color)+factor(spine), 
+           family = poisson(link="log"), crab)
+pfit_R = glm(y~width+factor(spine),     # without factor(color)
+             family = poisson(link="log"), crab)
+
+anova(pfit_R, pfit_F, test ="LRT" )
