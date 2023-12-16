@@ -1,0 +1,10 @@
+fit_F = glm(am ~ mpg + cyl + wt, family = binomial(link="logit"), mtcars)
+
+fit_R1 = glm(am ~ mpg+wt, family = binomial(link="logit"), mtcars)
+
+fit_R2 = glm(am ~ mpg, family = binomial(link="logit"), mtcars)
+
+
+anova(fit_R1, fit_F, test ="LRT" )
+
+anova(fit_R2, fit_F, test ="LRT" )
