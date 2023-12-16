@@ -1,0 +1,15 @@
+library(foreign)
+
+Dat = read.dta("https://stats.idre.ucla.edu/stat/data/hsbdemo.dta")
+
+library(VGAM)
+
+mfit = vglm(prog~ses + math + science, 
+
+            family = multinomial(refLevel = "vocation"),
+
+            data = Dat)
+
+predict(mfit, newdata = data.frame(ses="low",math=40,science=39), 
+
+        type = "response")
