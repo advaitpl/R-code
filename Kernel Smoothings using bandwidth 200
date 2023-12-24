@@ -1,0 +1,15 @@
+library(datasets)
+
+timeeu = time(EuStockMarkets)
+
+DAX = EuStockMarkets[,1]
+
+FTSE = EuStockMarkets[,4]
+
+plot(DAX,FTSE,cex=.7,col=3)
+
+kr = kreg(DAX, FTSE, bandwidth=200,
+
+          kernel = "triangular", grid=sort(DAX))
+
+lines(kr$x, kr$y, lwd=2)
