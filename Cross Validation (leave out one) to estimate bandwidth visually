@@ -1,0 +1,35 @@
+library(datasets)
+
+DAX = EuStockMarkets[,1]
+
+FTSE = EuStockMarkets[,4]
+
+n = length(DAX)
+
+hrange = c(10:15)*10
+
+cv = NULL
+
+for (h in hrange) {
+
+  cvh = 0
+
+  for (i in 1:n) {
+
+    xi = DAX[-i]
+
+    yi = FTSE[-i]
+
+    fit = kreg(xi, yi, grid=sort(DAX)[i], bandwidth=h, 
+
+               kernel = "epanechnikov")$y
+
+    cvh = cvh + ((FTSE[i] - fit)^2)
+
+  }
+
+  cv = rbind(cv,cvh/n)
+
+}
+
+plot(hrange, cv)
