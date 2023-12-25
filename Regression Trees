@@ -1,0 +1,13 @@
+DAX = EuStockMarkets[,1]; sx = sort(DAX)
+
+FTSE = EuStockMarkets[,4]; sy = FTSE[order(DAX)]
+
+library(rpart); library(rpart.plot)
+
+treestock = rpart(sy~sx)
+
+rpart.plot(treestock, extra = 0)
+quantile(sx,probability=c(.25,.5,.75))
+plot(DAX,FTSE,cex=.5,col=3)
+
+lines(sx, predict(treestock, DAX), col=2)
