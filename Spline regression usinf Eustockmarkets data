@@ -1,0 +1,23 @@
+library(datasets)
+
+DAX = EuStockMarkets[,1]; sx = sort(DAX)
+
+FTSE = EuStockMarkets[,4]; sy = FTSE[order(DAX)]
+
+plot(DAX,FTSE,cex=.5,col=3)
+
+library(splines)
+
+lm1 = lm(sy ~ bs(sx, df=9)); lines(sx, lm1$fit)
+
+library(Epi)
+
+lm2 = lm(sy ~ Ns(sx, df=9)); lines(sx, lm2$fit, col=2)
+
+ss3 = smooth.spline(sx, sy, df=9); lines(ss3, col = 4)
+
+legend("bottomright", 
+
+       c("Regression spline", "Natural spline", "Smoothing spline"),
+
+       lty=1, col=c(1,2,4))
