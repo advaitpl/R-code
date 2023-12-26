@@ -1,0 +1,37 @@
+DAX = EuStockMarkets[,1]; sx = sort(DAX)
+
+FTSE = EuStockMarkets[,4]; sy = FTSE[order(DAX)]
+
+stocks = data.frame(sx=sx, sy=sy) 
+
+library(rpart)
+
+treestock = rpart(sy~sx, data = stocks)
+
+n = length(sx); set.seed(123); nbag = 500; treebags <- list()
+
+for (i in 1:nbag)
+
+{
+
+  sid = sort(sample(1:n,size=n,replace=T))
+
+  treebags = c(treebags,list(rpart(sy[sid]~sx[sid], data = stocks)))
+
+}
+
+bagpred = 0
+
+for (model in treebags)  bagpred = bagpred + predict(model, newdata = stocks)
+
+bagpred = bagpred / nbag
+
+plot(DAX, FTSE, cex=0.5, col=3)
+
+lines(sx, predict(treestock, stocks), col=4)
+
+lines(sx, bagpred, col=2, lwd=2)
+
+legend("bottomright", c("Fit from tree",
+
+                        "Fit from bagged tree"), lty=1,col=c(4,2))
